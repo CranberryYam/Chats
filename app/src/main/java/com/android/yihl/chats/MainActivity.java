@@ -1,8 +1,12 @@
 package com.android.yihl.chats;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -13,16 +17,31 @@ import static java.lang.Boolean.TRUE;
 
 public class MainActivity extends AppCompatActivity {
     private ListView mListView;
+    public BroadcastReceiver msmReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        actionbarTitleCenter();
+        mListView = (ListView) findViewById(R.id.recipe_list_view);
+        mockChatClient();
+        Log.v("henry","........................");
+        Intent socketIntent = new Intent(this,BuildSocketService.class);
+        startService(socketIntent);
+        msmReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.v("henry","got a broadcast");
+            }
+        };
+
+    }
+    private void actionbarTitleCenter(){
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.actionbar);
-
-        mListView = (ListView) findViewById(R.id.recipe_list_view);
-
+    }
+    private void mockChatClient(){
         ChatMessage m1 = new ChatMessage("Hello", TRUE);
         ChatMessage m2 = new ChatMessage("Hi", FALSE);
         ChatMessage m3 = new ChatMessage("What's up?", TRUE);
@@ -42,8 +61,4 @@ public class MainActivity extends AppCompatActivity {
         mListView.setAdapter(mAdapter);
     }
 
-    private void buildChatClient(){
-        Client client = new Client("henry","localhost",16790);
-        client.begin();
-    }
 }
