@@ -49,15 +49,18 @@ public class MessageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ChatMessage message = mDataSource.get(position);
         View rowView;
+        int imageID;
         if (message.isMine() == true){
             rowView = mInflater.inflate(R.layout.item_chat_right,parent, false);
+            imageID = R.mipmap.photo1;
         }else {
             rowView = mInflater.inflate(R.layout.item_chat_left,parent,false);
+            imageID = R.mipmap.photo2;
         }
         TextView contentTextView = (TextView) rowView.findViewById(R.id.txt_msg);
         contentTextView.setText(message.getContent());
         ImageView photoImageView = (ImageView) rowView.findViewById(R.id.tex_photo);
-        photoImageView.setImageResource(R.mipmap.ic_launcher);
+        photoImageView.setImageResource(imageID);
         return  rowView;
     }
 }
